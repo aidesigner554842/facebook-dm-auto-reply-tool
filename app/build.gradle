@@ -1,0 +1,109 @@
+```groovy
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext {
+        // Define versions for dependencies for better maintainability
+        kotlin_version = '1.6.10'
+        gradle_version = '7.0.2'
+        lifecycle_version = '2.4.0'
+        coroutines_version = '1.5.2'
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:$gradle_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+```
+
+```groovy
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+// This block defines the Android application configurations
+android {
+    compileSdkVersion 31 // The API level used to compile the application
+
+    defaultConfig {
+        applicationId "com.madhub.facebookdmautoreplyt" // Unique ID for the application
+        minSdkVersion 21 // Minimum API level required to run the application
+        targetSdkVersion 31 // The API level the application targets
+        versionCode 1 // Version code for the application
+        versionName "1.0.0" // Version name for display
+        resourceConfigurations "en" // Specify supported language configurations
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false // Disable code shrinking for release builds
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro' // ProGuard configuration
+        }
+        debug {
+            applicationIdSuffix ".debug" // Suffix for the debug build
+            versionNameSuffix "-debug" // Suffix for the debug version name
+        }
+    }
+}
+
+// Configure Kotlin options to enable coroutines support and improve compatibility
+kotlinOptions {
+    jvmTarget = "1.8" // Target JVM version
+}
+
+// Define the dependencies for the application
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" // Kotlin standard library for better language support
+    implementation "androidx.core:core-ktx:1.6.0" // Android KTX for Kotlin extensions enhancing Android API usability
+    implementation "androidx.appcompat:appcompat:1.3.1" // AppCompat for backward compatibility support
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version" // Lifecycle library for managing UI-related data in a lifecycle-conscious way
+
+    // Coroutines support for asynchronous programming
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version" // Core coroutine library
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version" // Coroutine support for Android
+
+    // Networking library for API interactions
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0' // Retrofit for network requests
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0' // Gson converter for JSON parsing
+
+    // Dependency for handling background operations, beneficial for automation tasks
+    implementation 'androidx.work:work-runtime-ktx:2.7.0' // WorkManager for scheduling background tasks
+
+    // Add dependency for Facebook SDK to enable Facebook integration
+    implementation 'com.facebook.android:facebook-android-sdk:[latest-version]' // For Facebook API interaction
+
+    // Additional dependencies can be added here based on features
+}
+
+// This configuration leverages the capabilities of the Android platform to enable a robust
+// social media management solution. It facilitates automated operations that comply with
+// platform terms of service, ensuring a sustainable and effective user experience.
+```
+
+### Explanation of Key Components:
+- **compileSdkVersion**: Set to the latest stable version for optimal support of new features and functionalities.
+- **minSdkVersion**: Minimum API level that ensures broader device compatibility.
+- **dependencies**: Organized to include critical libraries that assist in network operations, background processing, and lifecycle management, which are essential for a social media management application.
+- **kotlinOptions**: Specifies JVM target to ensure compatibility with modern Kotlin features.
+- **WorkManager**: Essential for background tasks, allowing for proper scheduling and execution of automated responses in adherence to Android's best practices.
+
+### Notable Technical Aspects:
+1. **Modular Dependency Management**: Using `ext` for version management improves maintainability.
+2. **Lifecycle-Aware Components**: Ensuring that UI components are appropriately tied to their lifecycle, which is critical in managing automated responses based on user interactions.
+3. **Coroutines**: Utilizing coroutines for asynchronous programming provides a clean and efficient way to handle background operations without blocking the UI thread. 
+
+This build configuration is aimed at creating a robust and compliant social media automation tool, focusing on best practices in Android development while leveraging the MadHub capabilities for enhanced performance.
